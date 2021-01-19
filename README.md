@@ -6,7 +6,7 @@
 可利用应用工作台名称、企业名称、企业corpId和创建者搜索并指定页码范围。<br />
 支持模糊搜索。
 
-<a href="https://greasyfork.org/zh-CN/scripts/420174-%E9%92%89%E9%92%89%E5%90%8E%E5%8F%B0%E5%AE%9A%E5%88%B6%E5%BA%94%E7%94%A8%E6%9F%A5%E6%89%BE" target="_blank">插件地址</a>
+[插件地址](https://greasyfork.org/zh-CN/scripts/420174-%E9%92%89%E9%92%89%E5%90%8E%E5%8F%B0%E5%AE%9A%E5%88%B6%E5%BA%94%E7%94%A8%E6%9F%A5%E6%89%BE)
 
 ![添加的图标位置](https://greasyfork.s3.us-east-2.amazonaws.com/h74gf2qvcc5jysgnqqcz4jvjtbu7)
 
