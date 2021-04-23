@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         钉钉后台定制应用查找
 // @namespace    http://tampermonkey.net/
-// @version      0.5
+// @version      1.3
 // @description  钉钉后台-定制服务-定制应用查找功能。鉴于现在定制应用钉钉未作查找，在存在大量数据的情境下一页页翻过于麻烦，所以搞了临时搞了一个搜索功能来使用，可利用应用工作台名称、企业名称、企业corpId和创建者搜索并指定页码范围，支持模糊搜索。
 // @author       super puffer fish
 // @match        https://open-dev.dingtalk.com/*
@@ -13,7 +13,12 @@
   'use strict'
 
   function init () {
-    if (location.href === 'https://open-dev.dingtalk.com/#/list-custom') {
+    const hrefList = [
+      'https://open-dev.dingtalk.com/fe/old#/list-custom',
+      'https://open-dev.dingtalk.com/#/list-custom',
+      'https://open-dev.dingtalk.com/v2/fe/old#/list-custom'
+    ]
+    if (hrefList.indexOf(location.href) > 0) {
       !$('.own-iconfont-add')[0] && addHtml()
     } else {
       removeHtml()
@@ -156,7 +161,7 @@
             $('.own-result')[0].style.display = 'block'
             $('.own-result .own-result-num span')[0].innerText = Number(num) + 1
             const href = item.appType === 5
-            ? `https://open-dev.dingtalk.com/#/appMgr/custom/eapp/${item.agentId}/1`
+            ? `https://open-dev.dingtalk.com/v2/fe/old#/appMgr/custom/eapp/${item.agentId}/1`
             : `https://open-dev.dingtalk.com/#/manage-bench?agentId=${item.agentId}&appType=${item.appType}&from=custom`
             const n = $(`
               <div class="own-result-list-item">
