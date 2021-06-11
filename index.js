@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         钉钉后台定制应用查找
 // @namespace    http://tampermonkey.net/
-// @version      1.5.0
+// @version      1.6.0
 // @description  钉钉后台-定制服务-定制应用查找功能。鉴于现在定制应用钉钉未作查找，在存在大量数据的情境下一页页翻过于麻烦，所以搞了临时搞了一个搜索功能来使用，可利用应用工作台名称、企业名称、企业corpId和创建者搜索并指定页码范围，支持模糊搜索。
 // @author       super puffer fish
 // @match        *://open-dev.dingtalk.com/*
@@ -11,10 +11,15 @@
 
 (function () {
   'use strict'
+
+  const css = '<style type="text/css" id="my-style-of-ding">.own-iconfont-add{font-size:18px;margin-right:8px;cursor:pointer;color:blue;}.own-find-modal{width:500px;background:#fff;border-radius:12px;border:1px solid #ccc;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;padding:20px;}.own-form-item{padding-bottom:12px;display:flex;}.own-form-item .own-label{width: 100px;}.own-form-item input{flex:1;}.own-form-item-value-pn{margin-right:24px;}.own-result-num{font-weight:bold;padding-top:4px;}.own-result-list{max-height:300px;overflow-y:auto;}.own-result-list-item a{color:blue;font-size:18px;}.own-result-list-item-num{font-weight:bold;}.own-result-list-item-info{padding-left:22px;white-space:pre-wrap;}.own-loading{font-size:20px;animation: loading 2s;animation-iteration-count: infinite;}@keyframes loading{0% { transform: rotate(0); } 100% { transform: rotate(360deg); }}#own-close{float:right;}#own-search,#own-reset{margin-right:12px;}`@font-face {font-family: own-iconfont;src: url(//at.alicdn.com/t/font_2324733_p5cinjv70fj.woff2?t=1621321322780) format(woff2),url(//at.alicdn.com/t/font_2324733_p5cinjv70fj.woff?t=1621321322780) format(woff),url(//at.alicdn.com/t/font_2324733_p5cinjv70fj.ttf?t=1621321322780) format(truetype);}`.own-iconfont{font-family:"own-iconfont" !important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:0.2px;-moz-osx-font-smoothing:grayscale;}</style>'
+
   function init () {
     if (/list-custom/.test(location.href)) {
       !$('.own-iconfont-add')[0] && addHtml()
+      !$('#my-style-of-ding')[0] && $('head').append(css)
     } else {
+      $('#my-style-of-ding')[0] && $('#my-style-of-ding').remove()
       $('.own-iconfont-add')[0] && $('.own-iconfont-add').remove()
     }
   }
@@ -103,7 +108,7 @@
       + `<span class="own-result-list-item-num">`
       + `${Number(num) + 1}：第${pn}页，第${i + 1}个；${item.appType === 5 ? '发布页面' : ''}`
       + `</span>`
-      + `<a target="_blank" href="${href}" title="跳转到详情" ><i class="own-iconfont">&#xe612;</i></a>`
+      + `<a target="_blank" href="${href}" title="跳转到详情" >跳转到发布页面</a>`
       + `<div class="own-result-list-item-info">`
       + `<div>应用名称：${item.appName}</div>`
       + `<div>企业名称：${item.authCorpName}</div>`
@@ -162,27 +167,6 @@
       }
     }
   }
-
-  const css = '<style type="text/css">'
-    + '.own-iconfont-add{font-size:18px;margin-right:8px;cursor:pointer;color:blue;}'
-    + '.own-find-modal{width:500px;background:#fff;border-radius:12px;border:1px solid #ccc;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;padding:20px;}'
-    + '.own-form-item{padding-bottom:12px;display:flex;}'
-    + '.own-form-item .own-label{width: 100px;}'
-    + '.own-form-item input{flex:1;}'
-    + '.own-form-item-value-pn{margin-right:24px;}'
-    + '.own-result-num{font-weight:bold;padding-top:4px;}'
-    + '.own-result-list{max-height:300px;overflow-y:auto;}'
-    + '.own-result-list-item a{color:blue;font-size:18px;}'
-    + '.own-result-list-item-num{font-weight:bold;}'
-    + '.own-result-list-item-info{padding-left:22px;white-space:pre-wrap;}'
-    + '.own-loading{font-size:20px;animation: loading 2s;animation-iteration-count: infinite;}'
-    + '@keyframes loading{0% { transform: rotate(0); } 100% { transform: rotate(360deg); }}'
-    + '#own-close{float:right;}#own-search,#own-reset{margin-right:12px;}'
-    + `@font-face {font-family: 'own-iconfont';src: url('//at.alicdn.com/t/font_2324733_p5cinjv70fj.woff2?t=1621321322780') format('woff2'),url('//at.alicdn.com/t/font_2324733_p5cinjv70fj.woff?t=1621321322780') format('woff'),url('//at.alicdn.com/t/font_2324733_p5cinjv70fj.ttf?t=1621321322780') format('truetype');}`
-    + '.own-iconfont{font-family:"own-iconfont" !important;font-size:16px;font-style:normal;-webkit-font-smoothing:antialiased;-webkit-text-stroke-width:0.2px;-moz-osx-font-smoothing:grayscale;}'
-    + '</style>'
-
-  $('head').append(css)
 
   // 将pushState和replaceState注入监听方法
   const _historyWrap = function (type) {
